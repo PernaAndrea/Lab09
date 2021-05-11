@@ -22,7 +22,7 @@ public class Model {
 	private SimpleGraph<Country,DefaultEdge> grafo;
 	private Map<Integer,Country> idMap;
 	private Map<Country,Country> visita;
-	private ArrayList<Border> confini;
+	//private ArrayList<Border> confini;
 	
 	public Model() {
 		
@@ -77,7 +77,7 @@ public class Model {
 		for(Country c : grafo.vertexSet()) {
 			mappa.put(c, grafo.degreeOf(c));
 			if(grafo.degreeOf(c)!=0)
-			tot+=c.getStateNme()+" "+ grafo.degreeOf(c)+"\n";
+			tot+=c.getcCode()+" "+c.getStateNme()+" "+grafo.degreeOf(c)+"\n";
 		}
 		return tot;
 	}

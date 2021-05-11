@@ -53,7 +53,7 @@ public class FXMLController {
 
     @FXML
     void doCalcolaStatiRaggiungibili(ActionEvent event) {
-    	
+    	//model.creaGrafo(1816);
     //	txtResult.setText(" "+model.calcolaRaggiungibili(CmbStato.getValue()));
     	txtResult.clear();
     	Country input = this.CmbStato.getValue();
