@@ -2,6 +2,7 @@
 package it.polito.tdp.borders;
 
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
 
 import it.polito.tdp.borders.model.Country;
@@ -52,7 +53,24 @@ public class FXMLController {
 
     @FXML
     void doCalcolaStatiRaggiungibili(ActionEvent event) {
-
+    	
+    //	txtResult.setText(" "+model.calcolaRaggiungibili(CmbStato.getValue()));
+    	txtResult.clear();
+    	Country input = this.CmbStato.getValue();
+    	if(input == null) {
+    		txtResult.appendText("ERRORE: selezionare una nazione");
+    		return;
+    	}
+    	
+    	List<Country> result = model.calcolaRaggiungibili(input);
+    	if(result.size()==1) {
+    		txtResult.appendText("Non vi sono nazioni raggiungibili via terra rispetto a "+input.toString());
+    		return;
+    	}else {
+    		for(Country c: result) {
+    			txtResult.appendText(c.toString()+"\n");
+    		}
+    	}
     }
 
     @FXML

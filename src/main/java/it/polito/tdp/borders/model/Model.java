@@ -4,10 +4,17 @@ import java.util.*;
 
 import org.jgrapht.Graphs;
 import org.jgrapht.alg.connectivity.ConnectivityInspector;
+
 import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.graph.SimpleGraph;
-
+import org.jgrapht.traverse.BreadthFirstIterator;
+import org.jgrapht.traverse.DepthFirstIterator;
+import org.jgrapht.event.TraversalListener;
 import it.polito.tdp.borders.db.BordersDAO;
+import org.jgrapht.event.ConnectedComponentTraversalEvent;
+import org.jgrapht.event.EdgeTraversalEvent;
+
+import org.jgrapht.event.VertexTraversalEvent;
 
 public class Model {
 
@@ -39,7 +46,8 @@ public class Model {
 		for(Border b : dao.getCountryPairs(anno, idMap)) {
 			DefaultEdge e = this.grafo.getEdge(b.getC1(), b.getC2());
 			if(e==null) {
-				this.grafo.addEdge(b.getC1(), b.getC2());
+			//	this.grafo.addEdge(b.getC1(), b.getC2());
+				Graphs.addEdgeWithVertices(this.grafo, b.getC1(), b.getC2());
 			}
 		}
 	}
@@ -73,4 +81,75 @@ public class Model {
 		}
 		return tot;
 	}
+	public List<Country> calcolaRaggiungibili(Country partenza) {
+		List<Country> percorso = new ArrayList<>();
+		BreadthFirstIterator<Country,DefaultEdge> it = new BreadthFirstIterator<>(this.grafo,partenza);
+		
+		this.visita = new HashMap<>();
+		this.visita.put(partenza, null);
+		
+		it.addTraversalListener(new TraversalListener<Country,DefaultEdge>(){
+
+			@Override
+			public void connectedComponentFinished(ConnectedComponentTraversalEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void connectedComponentStarted(ConnectedComponentTraversalEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void edgeTraversed(EdgeTraversalEvent<DefaultEdge> e) {
+				// TODO Auto-generated method stub
+				Country c1 = grafo.getEdgeSource(e.getEdge());
+				Country c2 = grafo.getEdgeTarget(e.getEdge());
+				
+				if(visita.containsKey(c2) && !visita.containsKey(c1)) {
+					visita.put(c1, c2);
+				}else if(!visita.containsKey(c2) && visita.containsKey(c2)) {
+					visita.put(c2, c1);
+				}
+			}
+
+			@Override
+			public void vertexTraversed(VertexTraversalEvent<Country> e) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void vertexFinished(VertexTraversalEvent<Country> e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+		});
+		//String result ="";
+		while(it.hasNext()) {
+			Country cc = it.next();
+		//	result+= cc.getStateNme()+"\n";
+			percorso.add(cc);
+		}
+		return percorso;
+	}
+
+	public List<Country> calcolaRaggiungibiliDeep(Country value) {
+		// TODO Auto-generated method stub
+		DepthFirstIterator<Country,DefaultEdge> it = new DepthFirstIterator<>(this.grafo,value);
+		visita  = new HashMap<>();
+		List<Country> percorso = new LinkedList<>();
+	//	visita.put(value, null);
+		percorso.add(value);
+		
+		while(it.hasNext()) {
+			Country c = it.next();
+			percorso.add(c);
+		}
+		return percorso;
+	}
+	
 }
