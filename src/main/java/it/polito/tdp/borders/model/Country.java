@@ -20,9 +20,6 @@ public class Country {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + cCode;
-		result = prime * result + nConfini;
-		result = prime * result + ((stateAbb == null) ? 0 : stateAbb.hashCode());
-		result = prime * result + ((stateNme == null) ? 0 : stateNme.hashCode());
 		return result;
 	}
 
@@ -36,18 +33,6 @@ public class Country {
 			return false;
 		Country other = (Country) obj;
 		if (cCode != other.cCode)
-			return false;
-		if (nConfini != other.nConfini)
-			return false;
-		if (stateAbb == null) {
-			if (other.stateAbb != null)
-				return false;
-		} else if (!stateAbb.equals(other.stateAbb))
-			return false;
-		if (stateNme == null) {
-			if (other.stateNme != null)
-				return false;
-		} else if (!stateNme.equals(other.stateNme))
 			return false;
 		return true;
 	}
